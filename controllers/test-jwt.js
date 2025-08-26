@@ -1,8 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
-const verifyToken = require('./verify-token');
+// const User = require('../models/user');
+// const verifyToken = require('./verify-token');
 const router = express.Router();
 
 router.post('/generate', async (req, res) => {
@@ -24,7 +24,7 @@ router.post('/generate', async (req, res) => {
   }
 });
 
-router.get('/protected', verifyToken, (req, res) => {
+router.get('/protected', (req, res) => {
   res.status(200).json({ message: 'Protected route accessed', user: req.user });
 });
 
