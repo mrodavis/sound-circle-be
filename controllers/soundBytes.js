@@ -33,7 +33,7 @@ router.get("/", verifyToken, async (req, res) => {
 //show soundByte - READ - get - /:sByteId
 router.get("/:sByteId", verifyToken, async (req, res) => {
     try {
-        const sByte = await SoundByte.findById(req.params.soundByteId).populate("author");
+        const sByte = await SoundByte.findById(req.params.sByteId).populate("author");
         res.status(200).json(sByte);
     } catch (err) {
         res.status(500).json({ err: err.message });
@@ -101,7 +101,7 @@ router.post("/:sByteId/comments", verifyToken, async (req, res) => {
 });
 
 //show comment - READ - get - '/:sByteId/comments/:commentId'
-router.put("/:sByteId/comments/:commentId", verifyToken, async (req, res) => {
+router.get("/:sByteId/comments/:commentId", verifyToken, async (req, res) => {
     try {
         const sByte = await SoundByte.findById(req.params.sByteId);
         const comment = sByte.comments.id(req.params.commentId);
