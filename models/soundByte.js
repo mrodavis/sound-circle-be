@@ -14,18 +14,25 @@ const commentSchema = new mongoose.Schema(
 
 const soundByteSchema = new mongoose.Schema(
     {
+        artist: {
+            type: String,
+            required: true,
+        },
         title: {
             type: String,
             required: true,
         },
-        text: {
+        album: {
             type: String,
             required: true,
         },
-        category: {
+        url: {
             type: String,
             required: true,
-            enum: ["News", "Sports", "Games", "Movies", "Music", "Television"],
+        },
+        notes: {
+            type: String,
+            required: true,
         },
         author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         comments: [commentSchema],
