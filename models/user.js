@@ -1,14 +1,22 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
-    username: {
+  email: { 
+    type: String, 
+    required: true, 
+    unique: true, 
+    lowercase: true, 
+    trim: true },  
+  username: {
         type: String,
         required: true,
     },
     hashedPassword: {
         type: String,
         required: true,
-    }
+    },
+    // User's playlist: array of Track ObjectIds
+    playlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Track' }]
 
 })
 
