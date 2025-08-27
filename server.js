@@ -26,7 +26,7 @@ app.use(logger('dev'));
 app.use('/auth', authRouter);
 app.use('/test-jwt', testJwtRouter);
 app.use('/users', usersRouter);
-app.use("/sBytes", soundBytesRouter);
+app.use('/soundbytes', soundBytesRouter);
 app.use('/tracks', tracksRouter);
 
 // basic 404
