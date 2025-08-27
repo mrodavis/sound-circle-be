@@ -42,6 +42,7 @@ router.get("/:sByteId", verifyToken, async (req, res) => {
 
 //edit  soundByte - UPDATE -  put - /:sByteId
 router.put("/:sByteId", verifyToken, async (req, res) => {
+    console.log(req.body)
     try {
         // Find the sByte:
         const sByte = await SoundByte.findById(req.params.sByteId);
@@ -50,13 +51,17 @@ router.put("/:sByteId", verifyToken, async (req, res) => {
             return res.status(403).send("You're not allowed to do that!");
         }
         // Update sByte:
+        console.log(req.params.sByteId) 
+        //something in 54-56 is causing the problem
+        //stumped Glenn -- checked that data is sending, confirmed in postman, UI is sending data to BE but not displaying
+        
         const updatedSoundByte = await SoundByte.findByIdAndUpdate(
             req.params.sByteId,
             req.body,
-            { new: true }
+            // { new: true }
         );
         // Append req.user to the author property:
-        updatedSoundByte._doc.author = req.user;
+        // updatedSoundByte._doc.author = req.user;
         // Issue JSON response:
         res.status(200).json(updatedSoundByte);
     } catch (err) {
