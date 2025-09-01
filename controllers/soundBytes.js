@@ -22,7 +22,9 @@ router.post("/", verifyToken, async (req, res) => {
 router.get("/", verifyToken, async (req, res) => {
     try {
         const sByte = await SoundByte.find({})
-            .populate("author")
+            .populate(["author",
+                'comments.author'
+            ])
             .sort({ createdAt: "desc" });
         res.status(200).json(sByte);
     } catch (err) {
@@ -33,7 +35,7 @@ router.get("/", verifyToken, async (req, res) => {
 //show soundByte - READ - get - /:sByteId
 router.get("/:sByteId", verifyToken, async (req, res) => {
     try {
-        const sByte = await SoundByte.findById(req.params.sByteId).populate("author");
+        const sByte = await SoundByte.findById(req.params.sByteId).populate(['author', 'comments.author']);
         res.status(200).json(sByte);
     } catch (err) {
         res.status(500).json({ err: err.message });
@@ -85,6 +87,7 @@ router.delete("/:sByteId", verifyToken, async (req, res) => {
 
 //create comment - CREATE - post - '/:sByteId/comments'
 router.post("/:sByteId/comments", verifyToken, async (req, res) => {
+    console.log("test")
     try {
         req.body.author = req.user._id;
         const sByte = await SoundByte.findById(req.params.sByteId);
@@ -111,9 +114,7 @@ router.get("/:sByteId/comments/:commentId", verifyToken, async (req, res) => {
                 .status(403)
                 .json({ message: "You are not authorized to edit this comment" });
         }
-        comment.text = req.body.text;
-        await sByte.save();
-        res.status(200).json({ message: "Comment updated successfully" });
+        res.status(200).json(comment);
     } catch (err) {
         res.status(500).json({ err: err.message });
     }
