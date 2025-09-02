@@ -134,7 +134,7 @@ router.put("/:sByteId/comments/:commentId", verifyToken, async (req, res) => {
         }
         comment.text = req.body.text;
         await sByte.save();
-        res.status(200).json({ message: "Comment updated successfully" });
+        res.status(200).json(comment);
     } catch (err) {
         res.status(500).json({ err: err.message });
     }
