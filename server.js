@@ -18,7 +18,7 @@ mongoose.connection.on('connected', () => {
   console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
 });
 
-const PORT = process.env.PORT ? process.env.PORT: 3000;
+const PORT = process.env.PORT ? process.env.PORT : 3000;
 
 app.use(cors());
 app.use(express.json());
