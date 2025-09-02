@@ -8,26 +8,26 @@ const User = require('../models/user');
 const saltRounds = 12;
 
 router.post('/sign-up', async (req, res) => {
-  console.log(req.body)
-  try {
-    const userInDatabase = await User.findOne({ username: req.body.username });
+    console.log(req.body)
+    try {
+        const userInDatabase = await User.findOne({ username: req.body.username });
 
-    if (userInDatabase) {
-        return res.status(409).json({ err: 'Username already taken.' });
-    }
+        if (userInDatabase) {
+            return res.status(409).json({ err: 'Username already taken.' });
+        }
 
-    console.log(req.body);
-    const user = await User.create({
-        username: req.body.username,
-        email: req.body.email,
-        hashedPassword: bcrypt.hashSync(req.body.password, saltRounds)
-    });
+        console.log(req.body);
+        const user = await User.create({
+            username: req.body.username,
+            email: req.body.email,
+            hashedPassword: bcrypt.hashSync(req.body.password, saltRounds)
+        });
 
-    const payload = { username: user.username, _id: user._id }
+        const payload = { username: user.username, _id: user._id }
 
-    const token = jwt.sign({ payload }, process.env.JWT_SECRET);
+        const token = jwt.sign({ payload }, process.env.JWT_SECRET);
 
-    res.status(201).json({ token })
+        res.status(201).json({ token })
     } catch (err) {
         res.status(400).json({ err: err.message })
     }
@@ -54,6 +54,6 @@ router.post('/sign-in', async (req, res) => {
     } catch (err) {
         res.status(500).json({ err: err.message });
     }
-})
+});
 
 module.exports = router;

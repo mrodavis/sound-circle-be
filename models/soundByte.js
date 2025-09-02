@@ -11,7 +11,6 @@ const commentSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-
 const soundByteSchema = new mongoose.Schema(
     {
         artist: {

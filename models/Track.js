@@ -6,20 +6,20 @@ const isHttpUrl = (v) => !v || /^https?:\/\//i.test(v);
 const TrackSchema = new Schema(
   {
     // Required core identity
-    title:  { type: String, required: true, trim: true },
+    title: { type: String, required: true, trim: true },
     artist: { type: String, required: true, trim: true },
 
     // Stable dedupe key (lowercased "artist — title"). Unique index.
-    key:    { type: String, required: true, unique: true, index: true },
+    key: { type: String, required: true, unique: true, index: true },
 
     // Optional enrichment (filled by music.service when available)
-    album:        { type: String, trim: true },
-    releaseYear:  { type: Number, min: 1800, max: 9999 },
-    durationMs:   { type: Number, min: 0 },
+    album: { type: String, trim: true },
+    releaseYear: { type: Number, min: 1800, max: 9999 },
+    durationMs: { type: Number, min: 0 },
 
-    coverArtUrl:  { type: String, trim: true, validate: { validator: isHttpUrl, message: 'coverArtUrl must be http(s)' } },
+    coverArtUrl: { type: String, trim: true, validate: { validator: isHttpUrl, message: 'coverArtUrl must be http(s)' } },
     soundClipUrl: { type: String, trim: true, validate: { validator: isHttpUrl, message: 'soundClipUrl must be http(s)' } },
-    sourceUrl:    { type: String, trim: true, validate: { validator: isHttpUrl, message: 'sourceUrl must be http(s)' } },
+    sourceUrl: { type: String, trim: true, validate: { validator: isHttpUrl, message: 'sourceUrl must be http(s)' } },
 
     // External provider IDs (handy for idempotent enrichment)
     itunesId: { type: String, index: true, sparse: true },
@@ -27,11 +27,11 @@ const TrackSchema = new Schema(
 
     // Matching signals
     primaryGenre: { type: String, trim: true },
-    genres:       [{ type: String, trim: true }], // allow multiple tags
+    genres: [{ type: String, trim: true }], // allow multiple tags
 
     // Lightweight popularity counters (optional; can be derived later)
-    likesCount:     { type: Number, default: 0, min: 0 },
-    soundBytesCount:{ type: Number, default: 0, min: 0 }, // how many posts reference this track
+    likesCount: { type: Number, default: 0, min: 0 },
+    soundBytesCount: { type: Number, default: 0, min: 0 }, // how many posts reference this track
   },
   { timestamps: true }
 );

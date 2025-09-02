@@ -3,7 +3,6 @@ const verifyToken = require("../middleware/verify-token.js"); // needs to be bui
 const SoundByte = require("../models/soundByte.js"); // needs to be built
 const router = express.Router();
 
-
 /*----------------------soundBytes' Routes----------------------*/
 
 //create soundByte - CREATE - post - '/'
@@ -45,21 +44,16 @@ router.get("/:sByteId", verifyToken, async (req, res) => {
 //edit  soundByte - UPDATE -  put - /:sByteId
 router.put("/:sByteId", verifyToken, async (req, res) => {
     try {
-        // Find the sByte:
         const sByte = await SoundByte.findById(req.params.sByteId);
-        // Check permissions:
         if (!sByte.author.equals(req.user._id)) {
             return res.status(403).send("You're not allowed to do that!");
         }
-        // Update sByte:
         const updatedSoundByte = await SoundByte.findByIdAndUpdate(
             req.params.sByteId,
             req.body,
             { new: true }
         );
-        // Append req.user to the author property:
         updatedSoundByte._doc.author = req.user;
-        // Issue JSON response:
         res.status(200).json(updatedSoundByte);
     } catch (err) {
         res.status(500).json({ err: err.message });
@@ -70,11 +64,9 @@ router.put("/:sByteId", verifyToken, async (req, res) => {
 router.delete("/:sByteId", verifyToken, async (req, res) => {
     try {
         const sByte = await SoundByte.findById(req.params.sByteId);
-
         if (!sByte.author.equals(req.user._id)) {
             return res.status(403).send("You're not allowed to do that!");
         }
-
         const deletedSoundByte = await SoundByte.findByIdAndDelete(req.params.sByteId);
         res.status(200).json(deletedSoundByte);
     } catch (err) {
@@ -93,10 +85,8 @@ router.post("/:sByteId/comments", verifyToken, async (req, res) => {
         const sByte = await SoundByte.findById(req.params.sByteId);
         sByte.comments.push(req.body);
         await sByte.save();
-        // Find the newly created comment:
         const newComment = sByte.comments[sByte.comments.length - 1];
         newComment._doc.author = req.user;
-        // Respond with the newComment:
         res.status(201).json(newComment);
     } catch (err) {
         res.status(500).json({ err: err.message });
@@ -108,7 +98,6 @@ router.get("/:sByteId/comments/:commentId", verifyToken, async (req, res) => {
     try {
         const sByte = await SoundByte.findById(req.params.sByteId);
         const comment = sByte.comments.id(req.params.commentId);
-        // ensures the current user is the author of the comment
         if (comment.author.toString() !== req.user._id) {
             return res
                 .status(403)
@@ -120,13 +109,11 @@ router.get("/:sByteId/comments/:commentId", verifyToken, async (req, res) => {
     }
 });
 
-
 //edit  comment - UPDATE -  put - '/:sByteId/comments/:commentId'
 router.put("/:sByteId/comments/:commentId", verifyToken, async (req, res) => {
     try {
         const sByte = await SoundByte.findById(req.params.sByteId);
         const comment = sByte.comments.id(req.params.commentId);
-        // ensures the current user is the author of the comment
         if (comment.author.toString() !== req.user._id) {
             return res
                 .status(403)
@@ -145,7 +132,6 @@ router.delete("/:sByteId/comments/:commentId", verifyToken, async (req, res) => 
     try {
         const sByte = await SoundByte.findById(req.params.sByteId);
         const comment = sByte.comments.id(req.params.commentId);
-        // ensures the current user is the author of the comment
         if (comment.author.toString() !== req.user._id) {
             return res
                 .status(403)
